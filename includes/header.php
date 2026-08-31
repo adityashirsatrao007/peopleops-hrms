@@ -1,4 +1,4 @@
-<?php require_once 'config.php'; requireLogin(); ?>
+<?php require_once __DIR__ . '/../config.php'; requireLogin(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

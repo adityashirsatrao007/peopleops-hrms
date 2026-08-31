@@ -1,12 +1,11 @@
 <?php
 // PeopleOps - Employee Management System
-// database config
-// TODO: move these to .env for production
+// database config - supports both local (XAMPP) and Railway/Render deployment
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', ''); // XAMPP default
-define('DB_NAME', 'peopleops_db');
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_NAME', getenv('DB_NAME') ?: 'peopleops_db');
 define('SITE_NAME', 'PeopleOps');
 define('CURRENCY', '₹');
 

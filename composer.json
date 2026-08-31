@@ -1,0 +1,13 @@
+{
+  "name": "adityashirsatrao007/peopleops-hrms",
+  "description": "PeopleOps - Employee Management HRMS with AI",
+  "type": "project",
+  "require": {
+    "php": ">=8.0",
+    "ext-mysqli": "*",
+    "ext-mbstring": "*"
+  },
+  "autoload": {
+    "files": ["config.php"]
+  }
+}

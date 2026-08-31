@@ -190,7 +190,7 @@ function calculateAttritionRisk($conn, $employee_id) {
             SUM(overtime_hours) as total_overtime
         FROM attendance 
         WHERE employee_id = $employee_id 
-        AND attendance_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        AND attendance_date >= NOW() - INTERVAL '30 days'
     ")->fetch_assoc();
     
     if ($attendance['total_days'] > 0) {
@@ -215,7 +215,7 @@ function calculateAttritionRisk($conn, $employee_id) {
         SELECT COUNT(*) as leave_count 
         FROM leaves 
         WHERE employee_id = $employee_id 
-        AND start_date >= DATE_SUB(NOW(), INTERVAL 90 DAY)
+        AND start_date >= NOW() - INTERVAL '90 days'
         AND status = 'approved'
     ")->fetch_assoc();
     
@@ -233,7 +233,7 @@ function calculateAttritionRisk($conn, $employee_id) {
         FROM feedback 
         WHERE employee_id = $employee_id 
         ORDER BY created_at DESC LIMIT 3
-    ")->fetch_all(MYSQLI_ASSOC);
+    ")->fetch_all(PDO::FETCH_ASSOC);
     
     if (count($feedback) > 0) {
         $avg_rating = array_sum(array_column($feedback, 'rating')) / count($feedback);

@@ -33,7 +33,7 @@ $deptStats = $conn->query("
            (SELECT COUNT(*) FROM attendance a 
             JOIN employees emp ON a.employee_id=emp.id 
             WHERE emp.department_id=d.id AND a.status='absent'
-            AND a.attendance_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)) as total_absences
+            AND a.attendance_date >= NOW() - INTERVAL '30 days') as total_absences
     FROM departments d
     LEFT JOIN employees e ON d.id=e.department_id AND e.status='active'
     GROUP BY d.id, d.name

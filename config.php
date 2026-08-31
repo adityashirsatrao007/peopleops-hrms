@@ -1,19 +1,30 @@
 <?php
 // PeopleOps - Employee Management System
-// database config - supports both local (XAMPP) and Railway/Render deployment
+// Database configuration - supports PostgreSQL (Render) and MySQL (local XAMPP)
+require_once __DIR__ . '/includes/db_compat.php';
 
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'peopleops_db');
+$dbUrl = getenv('DATABASE_URL');
+if ($dbUrl) {
+    $parts = parse_url($dbUrl);
+    $host = $parts['host'] ?? 'localhost';
+    $port = $parts['port'] ?? '5432';
+    $dbname = ltrim($parts['path'], '/');
+    $user = $parts['user'] ?? '';
+    $pass = $parts['pass'] ?? '';
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+    $conn = new CompatDB($dsn, $user, $pass);
+    $conn->query("SET search_path TO hrms, public");
+} else {
+    $host = getenv('DB_HOST') ?: 'localhost';
+    $user = getenv('DB_USER') ?: 'root';
+    $pass = getenv('DB_PASS') ?: '';
+    $dbname = getenv('DB_NAME') ?: 'peopleops_db';
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+    $conn = new CompatDB($dsn, $user, $pass);
+}
+
 define('SITE_NAME', 'PeopleOps');
 define('CURRENCY', '₹');
-
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$conn->set_charset("utf8mb4");
 
 if (session_status() == PHP_SESSION_NONE) session_start();
 
@@ -25,7 +36,6 @@ function redirect($url) { header("Location: $url"); exit(); }
 function setMessage($type, $msg) { $_SESSION['flash'] = ['type'=>$type, 'msg'=>$msg]; }
 function getMessage() { if (isset($_SESSION['flash'])) { $m=$_SESSION['flash']; unset($_SESSION['flash']); return $m; } return null; }
 
-// generate employee ID like EMP001, EMP002...
 function generateEmpId() {
     global $conn;
     $result = $conn->query("SELECT emp_id FROM employees ORDER BY id DESC LIMIT 1");

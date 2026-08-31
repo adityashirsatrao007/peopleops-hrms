@@ -14,7 +14,7 @@ if (isset($_GET['toggle'])) {
 $employees = $conn->query("
     SELECT e.*, d.name as department_name,
            (SELECT COUNT(*) FROM attendance WHERE employee_id=e.id AND status='absent' 
-            AND attendance_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) as absent_days
+             AND attendance_date >= CURRENT_DATE - INTERVAL '30 days') as absent_days
     FROM employees e 
     LEFT JOIN departments d ON e.department_id=d.id 
     ORDER BY e.emp_id

@@ -5,7 +5,7 @@ require_once 'includes/ai_helpers.php';
 $totalEmployees = $conn->query("SELECT COUNT(*) as c FROM employees WHERE status='active'")->fetch_assoc()['c'];
 $departments = $conn->query("SELECT COUNT(*) as c FROM departments")->fetch_assoc()['c'];
 $pendingLeaves = $conn->query("SELECT COUNT(*) as c FROM leaves WHERE status='pending'")->fetch_assoc()['c'];
-$presentToday = $conn->query("SELECT COUNT(*) as c FROM attendance WHERE attendance_date=CURDATE() AND status='present'")->fetch_assoc()['c'];
+$presentToday = $conn->query("SELECT COUNT(*) as c FROM attendance WHERE attendance_date=CURRENT_DATE AND status='present'")->fetch_assoc()['c'];
 
 // Monthly payroll summary
 $currentMonth = date('m');

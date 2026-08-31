@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->query("INSERT INTO users (username, password, full_name, email, role) VALUES 
                   ('$username', '$password', '$first_name $last_name', '$email', 'hr')");
     
-    $user_id = $conn->insert_id;
+    $user_id = $conn->insert_id();
     
     $conn->query("INSERT INTO employees (emp_id, first_name, last_name, email, phone, date_of_birth, gender, address, city, 
                   department_id, designation, date_of_joining, employment_type, basic_salary, pan_number, aadhar_number, 

@@ -191,7 +191,8 @@ function calculateAttritionRisk($conn, $employee_id) {
         FROM attendance 
         WHERE employee_id = $employee_id 
         AND attendance_date >= NOW() - INTERVAL '30 days'
-    ")->fetch_assoc();
+    ");
+    $attendance = $attendance ? $attendance->fetch_assoc() : null;
     
     if ($attendance['total_days'] > 0) {
         $absence_rate = ($attendance['absent_days'] + ($attendance['half_days'] * 0.5)) / $attendance['total_days'];
@@ -217,7 +218,8 @@ function calculateAttritionRisk($conn, $employee_id) {
         WHERE employee_id = $employee_id 
         AND start_date >= NOW() - INTERVAL '90 days'
         AND status = 'approved'
-    ")->fetch_assoc();
+    ");
+    $leaves = $leaves ? $leaves->fetch_assoc() : null;
     
     if ($leaves['leave_count'] > 5) {
         $risk_score += 20;
@@ -233,7 +235,8 @@ function calculateAttritionRisk($conn, $employee_id) {
         FROM feedback 
         WHERE employee_id = $employee_id 
         ORDER BY created_at DESC LIMIT 3
-    ")->fetch_all(PDO::FETCH_ASSOC);
+    ");
+    $feedback = $feedback ? $feedback->fetch_all(PDO::FETCH_ASSOC) : [];
     
     if (count($feedback) > 0) {
         $avg_rating = array_sum(array_column($feedback, 'rating')) / count($feedback);
@@ -254,7 +257,8 @@ function calculateAttritionRisk($conn, $employee_id) {
     }
     
     // factor 4: tenure (new employees or very long tenure might be at risk)
-    $employee = $conn->query("SELECT date_of_joining FROM employees WHERE id = $employee_id")->fetch_assoc();
+    $employee = $conn->query("SELECT date_of_joining FROM employees WHERE id = $employee_id");
+    $employee = $employee ? $employee->fetch_assoc() : null;
     if ($employee) {
         $tenure_months = (strtotime('now') - strtotime($employee['date_of_joining'])) / (30 * 24 * 60 * 60);
         if ($tenure_months < 6) {

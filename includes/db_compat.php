@@ -30,7 +30,14 @@ class CompatDB {
 
     public function real_escape_string($str) {
         if (!is_string($str)) return $str;
-        return rtrim($this->pdo->quote($str), "'");
+        // Match mysqli behavior: escape special chars WITHOUT adding quotes
+        // PDO::quote() adds quotes, so we strip them
+        $quoted = $this->pdo->quote($str);
+        // Remove surrounding quotes added by PDO::quote
+        if (strlen($quoted) >= 2 && $quoted[0] === "'" && substr($quoted, -1) === "'") {
+            return substr($quoted, 1, -1);
+        }
+        return $quoted;
     }
 
     public function escape_string($str) {

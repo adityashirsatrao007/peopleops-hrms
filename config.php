@@ -11,7 +11,7 @@ if ($dbUrl) {
     $dbname = ltrim($parts['path'], '/');
     $user = $parts['user'] ?? '';
     $pass = $parts['pass'] ?? '';
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
     $conn = new CompatDB($dsn, $user, $pass);
     $conn->query("SET search_path TO hrms, public");
 } else {

@@ -1,7 +1,18 @@
-<?php require_once 'includes/header.php';
+<?php 
+require_once 'includes/header.php';
 require_once 'includes/ai_helpers.php';
 
-// Handle chat
+// handle quick question GET links (must be before any output for header redirect)
+if (isset($_GET['query'])) {
+    $query = sanitize($_GET['query']);
+    $response = hrChatbot($query);
+    $conn->query("INSERT INTO chatbot_logs (user_query, bot_response) VALUES ('$query', '" . sanitize($response) . "')");
+    $_SESSION['chat_history'][] = ['query' => $query, 'response' => $response];
+    header("Location: ai_chatbot.php");
+    exit();
+}
+
+// Handle chat POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query = sanitize($_POST['query']);
     $response = hrChatbot($query);
@@ -10,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->query("INSERT INTO chatbot_logs (user_query, bot_response) VALUES ('$query', '" . sanitize($response) . "')");
     
     $_SESSION['chat_history'][] = ['query' => $query, 'response' => $response];
+    header("Location: ai_chatbot.php");
+    exit();
 }
 
 $chat_history = $_SESSION['chat_history'] ?? [];
@@ -85,23 +98,8 @@ $chat_history = $_SESSION['chat_history'] ?? [];
 </div>
 
 <script>
-// auto scroll chat to bottom
 var chatBox = document.getElementById('chatBox');
 if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
 </script>
-
-<?php 
-// handle quick question GET links
-if (isset($_GET['query'])) {
-    $_POST['query'] = $_GET['query'];
-    // trigger the same logic
-    $query = sanitize($_GET['query']);
-    $response = hrChatbot($query);
-    $conn->query("INSERT INTO chatbot_logs (user_query, bot_response) VALUES ('$query', '" . sanitize($response) . "')");
-    $_SESSION['chat_history'][] = ['query' => $query, 'response' => $response];
-    header("Location: ai_chatbot.php");
-    exit();
-}
-?>
 
 <?php require_once 'includes/footer.php'; ?>

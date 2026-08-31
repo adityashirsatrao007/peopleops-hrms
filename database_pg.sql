@@ -215,3 +215,11 @@ INSERT INTO hrms.feedback (employee_id, feedback_text, rating, category) VALUES
 (5, 'Need better CRM tools. Current system is slow and outdated.', 2, 'work'),
 (2, 'Code review process is thorough. Helps maintain code quality.', 4, 'work'),
 (4, 'Marketing budget has been increased. Looking forward to new campaigns.', 4, 'compensation');
+
+INSERT INTO hrms.chatbot_logs (user_query, bot_response, created_at) VALUES
+('what is the leave policy?', 'Leave policy: Apply at least 2 days in advance for casual leave. Sick leave can be applied on the day itself with medical certificate if >2 days.', '2026-08-25 10:15:00'),
+('how much is pf deduction?', 'PF deduction is 12% of basic salary. You can check your PF balance on the EPFO portal.', '2026-08-26 11:30:00'),
+('can i work from home tomorrow?', 'WFH policy: Maximum 2 days per week with manager approval. Submit request at least 1 day in advance.', '2026-08-27 09:45:00'),
+('when is salary credited?', 'Salary is credited by the 7th of every month. For any salary-related queries, contact the Finance team.', '2026-08-28 14:20:00'),
+('what are the office timings?', 'Working hours: 9:00 AM to 6:00 PM, Monday to Friday. Saturday is half-day (9 AM - 1 PM) if required.', '2026-08-29 08:50:00'),
+('hello', 'Hello! I am the PeopleOps HR assistant. How can I help you today?', '2026-08-30 10:00:00');

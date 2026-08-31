@@ -1,0 +1,15 @@
+# PeopleOps HRMS
+# ignore sensitive files
+
+node_modules/
+.env
+.DS_Store
+Thumbs.db
+*.log
+uploads/*
+!uploads/.gitkeep
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
